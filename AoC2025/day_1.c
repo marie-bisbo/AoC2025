@@ -21,6 +21,9 @@ int main(int argc, char* argv[])
 	{
 		char direction = line[0];
 		int amount = atoi(&line[1]);
+		int rotations = amount / 100;
+		password += rotations;
+		amount -= (rotations * 100);
 
 		switch (direction)
 		{
@@ -28,16 +31,16 @@ int main(int argc, char* argv[])
 		{
 			if ((currentPosition + amount) > 99)
 			{
-				// ++password;
+				++password;
 			}
 			currentPosition = (currentPosition + amount) % 100;
 			break;
 		}
 		case 'L':
 		{
-			if ((currentPosition - amount) < 0)
+			if ((currentPosition - amount) < 1 && currentPosition != 0)
 			{
-				// ++password;
+				++password;
 			}
 			const int remainder = (currentPosition - amount) % 100;
 			currentPosition = remainder < 0 ? 100 + remainder : remainder;
@@ -45,11 +48,6 @@ int main(int argc, char* argv[])
 		}
 		default:
 			continue;
-		}
-
-		if (currentPosition == 0)
-		{
-			++password;
 		}
 	}
 

@@ -40,7 +40,6 @@ unsigned long long GetInvalidIds(unsigned long long rangeStart, unsigned long lo
 	unsigned long long invalidIds = 0;
 	for (unsigned long long i = rangeStart; i <= rangeEnd; i++)
 	{
-		// printf("i: %llu\n", i);
 		int numDigits = GetNumDigitsInNumber(i);
 		if (numDigits % 2 != 0)
 		{
@@ -92,8 +91,6 @@ int main(int argc, char* argv[])
 			beforeDash = true;
 			long long rangeA = atoll(rangeStart);
 			long long rangeB = atoll(rangeEnd);
-			printf("RangeA: %lld\n", rangeA);
-			printf("RangeB: %lld\n", rangeB);
 			totalInvalidIds += GetInvalidIds(rangeA, rangeB);
 			ResetArray(rangeStart, 50);
 			ResetArray(rangeEnd, 50);

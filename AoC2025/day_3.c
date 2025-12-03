@@ -3,7 +3,19 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define BANK_SIZE 101
+#define BANK_SIZE 100
+
+uint64_t Power(int value, int power)
+{
+	uint64_t result = 1;
+
+	while (power--)
+	{
+		result *= value;
+	}
+
+	return result;
+}
 
 int main(int argc, char* argv[])
 {
@@ -16,8 +28,8 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	char line[BANK_SIZE];
-	int totalJolts = 0;
+	char line[BANK_SIZE + 1];
+	uint64_t totalJolts = 0;
 
 	while ((fgets(line, sizeof(line), file)) != NULL)
 	{
@@ -25,28 +37,38 @@ int main(int argc, char* argv[])
 		{
 			continue;
 		}
-		int first = 0;
-		int second = 0;
-		for (int i = 0; i < BANK_SIZE - 2; i++)
+		int batteries[12] = { 0 };
+		int startIndex = 0;
+		int currentStartIndex = 0;
+		int endIndex = BANK_SIZE - 11;
+		for (int i = 0; i < 12; i++)
 		{
-			int batteryValue = line[i] - '0';
-			int nextBatteryValue = line[i + 1] - '0';
-			if (batteryValue > first)
+			startIndex = currentStartIndex;
+			for (int j = startIndex; j < endIndex; j++)
 			{
-				first = batteryValue;
-				second = 0;
-			}
-			if (nextBatteryValue > second)
-			{
-				second = nextBatteryValue;
-			}
+				int batteryValue = line[j] - '0';
+				if (batteryValue > batteries[i])
+				{
+					batteries[i] = batteryValue;
+					currentStartIndex = j + 1;
+				}
+			}	
+			++endIndex;
+		}
+		
+		uint64_t jolts = 0;
+		int power = 11;
+		for (int i = 0; i < 12; i++)
+		{
+			jolts += (batteries[i] * Power(10, power));
+			--power;
 		}
 
-		totalJolts += (first * 10) + second;
+		totalJolts += jolts;
 	}
 
 
-	printf("Total jolts: %d\n", totalJolts);
+	printf("Total jolts: %llu\n", totalJolts);
 
 	return 0;
 }

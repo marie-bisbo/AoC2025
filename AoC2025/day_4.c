@@ -76,35 +76,43 @@ int main(int argc, char* argv[])
 		++currentRow;
 	}
 
+	bool canRemove = true;
 	int accessibleToiletRolls = 0;
-	for (int i = 0; i < ROW_SIZE; i++)
+	while (canRemove)
 	{
-		for (int j = 0; j < COLUMN_SIZE; j++)
+		int tmpToiletRolls = 0;
+		for (int i = 0; i < ROW_SIZE; i++)
 		{
-			int index = GridPositionToIndex(i, j, COLUMN_SIZE);
-			if (grid[index] == 0)
+			for (int j = 0; j < COLUMN_SIZE; j++)
 			{
-				continue;
-			}
-			if (index == 49)
-			{
-				printf("Hello");
-			}
-			int* neighbours = GetNeighbours(grid, i, j, COLUMN_SIZE, ROW_SIZE);
-			int numToiletRolls = 0;
-			for (int rolls = 0; rolls < 8; rolls++)
-			{
-				int isRoll = neighbours[rolls];
-				numToiletRolls += neighbours[rolls];
-			}
-			if (numToiletRolls < 4)
-			{
-				printf("Toilet roll index: %d\n", index);
-				++accessibleToiletRolls;
-			}
+				int index = GridPositionToIndex(i, j, COLUMN_SIZE);
+				if (grid[index] == 0)
+				{
+					continue;
+				}
+				if (index == 49)
+				{
+					printf("Hello");
+				}
+				int* neighbours = GetNeighbours(grid, i, j, COLUMN_SIZE, ROW_SIZE);
+				int numToiletRolls = 0;
+				for (int rolls = 0; rolls < 8; rolls++)
+				{
+					int isRoll = neighbours[rolls];
+					numToiletRolls += neighbours[rolls];
+				}
+				if (numToiletRolls < 4)
+				{
+					grid[index] = 0;
+					++accessibleToiletRolls;
+					++tmpToiletRolls;
+				}
 
-			free(neighbours);
+				free(neighbours);
+			}
 		}
+
+		canRemove = tmpToiletRolls != 0;
 	}
 
 	printf("Accessible toilet rolls: %d\n", accessibleToiletRolls);

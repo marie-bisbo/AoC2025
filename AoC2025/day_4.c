@@ -90,10 +90,6 @@ int main(int argc, char* argv[])
 				{
 					continue;
 				}
-				if (index == 49)
-				{
-					printf("Hello");
-				}
 				int* neighbours = GetNeighbours(grid, i, j, COLUMN_SIZE, ROW_SIZE);
 				int numToiletRolls = 0;
 				for (int rolls = 0; rolls < 8; rolls++)
